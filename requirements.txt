@@ -1,4 +1,6 @@
 # PyTorch 1.10.0 pre-installed on Jetson Nano (skip installation)
 # torch<=1.10.0
-numpy>=1.19.0
-matplotlib>=3.0.0
+
+# Pin to versions compatible with Python 3.6 on Jetson Nano
+numpy>=1.19.0,<1.20.0
+matplotlib>=3.0.0,<3.3.0
