@@ -10,12 +10,12 @@ GAME_CONFIG = {
     'bird_size': 32,
     'bird_start_x': 100,
     'bird_start_y': 300,
-    'gravity': 0.4,  # REDUCED: Slower falling for easier learning
-    'jump_strength': -8.0,  # REDUCED: Gentler jumps, more control
+    'gravity': 0.3,  # VERY SLOW falling - easier to control
+    'jump_strength': -7.0,  # Gentle jumps for precise control
     'pipe_width': 80,
-    'pipe_gap': 350,  # INCREASED: Much larger gap, easier to pass
-    'pipe_speed': 1.5,  # REDUCED: Slower pipes, more time to react
-    'pipe_spawn_interval': 100,  # INCREASED: More time between pipes
+    'pipe_gap': 400,  # HUGE gap - very easy to pass through
+    'pipe_speed': 1.0,  # VERY SLOW pipes - lots of time to react
+    'pipe_spawn_interval': 120,  # Even more spacing between pipes
 }
 
 # ==================== NEURAL NETWORK SETTINGS ====================
@@ -61,16 +61,16 @@ TRAINING_CONFIG = {
 # ==================== REWARD SETTINGS ====================
 REWARD_CONFIG = {
     # Reward for staying alive per frame
-    'alive_reward': 0.5,  # INCREASED: Stronger survival reward
+    'alive_reward': 1.0,  # VERY HIGH: Strong survival reward
 
     # Penalty for jumping (DISABLED - jumping is necessary!)
     'jump_penalty': 0.0,
 
     # Penalty for collision/death
-    'death_penalty': -5,  # REDUCED: Lighter penalty to not overwhelm positives
+    'death_penalty': -3,  # VERY LIGHT: Don't discourage exploration
 
     # Bonus for passing a pipe
-    'pipe_pass_bonus': 20,  # INCREASED: Much bigger reward for success!
+    'pipe_pass_bonus': 50,  # HUGE: Massive reward for passing pipes!
 
     # Reward shaping (distance-based rewards)
     'use_distance_reward': False,  # DISABLED: Simplify learning, remove confusing signals
