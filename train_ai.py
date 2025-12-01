@@ -164,10 +164,11 @@ class FlappyBirdEnv:
             # Bird checks: 89.5 < 100? YES! Pipe passed immediately!
             spawn_x = 10.0
         else:
-            # Spawn subsequent pipes close enough that bird can reach them!
-            # At speed 0.3, bird needs ~100 frames to reach pipe at x=130
-            # This gives time for learning but is actually reachable
-            spawn_x = 200.0
+            # Spawn subsequent pipes VERY CLOSE so bird can reach them!
+            # Bird typically survives 50-100 frames
+            # At speed 0.3, need pipe at x = 100 + (50 * 0.3) = 115
+            # Spawn at x=120 so it reaches bird in ~67 frames
+            spawn_x = 120.0
 
         self.pipes.append({
             'x': spawn_x,
