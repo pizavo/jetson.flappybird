@@ -205,9 +205,10 @@ class FlappyBirdEnv:
         # Check boundaries
         if self.bird_y <= 0.0 or self.bird_y >= SCREEN_HEIGHT - BIRD_SIZE:
             self.alive = False
-            return self._get_observation(), DEATH_PENALTY, True, {}
+            return self._get_observation(), DEATH_PENALTY, True, {'score': self.score}
 
         # Update pipes
+        reward_bonus = 0.0  # Initialize reward bonus outside the loop
         for pipe in self.pipes:
             pipe['x'] -= PIPE_SPEED
 
@@ -215,14 +216,12 @@ class FlappyBirdEnv:
             if not pipe['passed'] and pipe['x'] + pipe['width'] < self.bird_x:
                 pipe['passed'] = True
                 self.score += 1
-                reward_bonus = PIPE_PASS_BONUS
-            else:
-                reward_bonus = 0.0
+                reward_bonus += PIPE_PASS_BONUS  # Accumulate bonuses
 
             # Check collision
             if self._check_collision(pipe):
                 self.alive = False
-                return self._get_observation(), DEATH_PENALTY, True, {}
+                return self._get_observation(), DEATH_PENALTY, True, {'score': self.score}
 
         # Remove off-screen pipes
         self.pipes = [p for p in self.pipes if p['x'] + p['width'] > -10.0]
@@ -239,9 +238,19 @@ class FlappyBirdEnv:
             reward += JUMP_PENALTY  # Penalty for jumping (encourages efficiency)
 
         if USE_DISTANCE_REWARD and self.pipes:
-            next_pipe = self.pipes[0]
-            horizontal_distance = max(next_pipe['x'] - self.bird_x, 0.0)
-            reward += DISTANCE_REWARD_SCALE * (horizontal_distance / GAME_CONFIG['screen_width'])
+            # Find the next pipe
+            next_pipe = None
+            for pipe in self.pipes:
+                if pipe['x'] + pipe['width'] > self.bird_x:
+                    next_pipe = pipe
+                    break
+
+            if next_pipe:
+                # Reward for being vertically centered in the gap
+                gap_center = next_pipe['gap_y'] + next_pipe['gap_height'] / 2.0
+                vertical_distance = abs(self.bird_y - gap_center)
+                vertical_reward = -DISTANCE_REWARD_SCALE * (vertical_distance / SCREEN_HEIGHT)
+                reward += vertical_reward
 
         reward += reward_bonus
 
@@ -399,6 +408,7 @@ def train_agent(episodes=NUM_EPISODES, save_dir=MODEL_DIR):
         state = env.reset()
         total_reward = 0
         steps = 0
+        score = 0
 
         while True:
             action = agent.select_action(state)
@@ -411,11 +421,11 @@ def train_agent(episodes=NUM_EPISODES, save_dir=MODEL_DIR):
             state = next_state
             total_reward += reward
             steps += 1
+            score = info.get('score', score)  # Update score each step
 
             if done:
                 break
 
-        score = info.get('score', 0)
         scores.append(score)
 
         # Update target network every 10 episodes

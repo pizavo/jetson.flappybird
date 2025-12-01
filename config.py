@@ -32,7 +32,7 @@ TRAINING_CONFIG = {
     'num_episodes': 1000,
 
     # Learning rate for the optimizer
-    'learning_rate': 0.001,
+    'learning_rate': 0.0005,
 
     # Discount factor for future rewards
     'gamma': 0.99,
@@ -40,10 +40,10 @@ TRAINING_CONFIG = {
     # Exploration settings
     'epsilon_start': 1.0,
     'epsilon_min': 0.01,
-    'epsilon_decay': 0.995,
+    'epsilon_decay': 0.998,
 
     # Batch size for training
-    'batch_size': 64,
+    'batch_size': 32,
 
     # Replay buffer capacity
     'buffer_capacity': 10000,
@@ -67,14 +67,14 @@ REWARD_CONFIG = {
     'jump_penalty': -0.05,
 
     # Penalty for collision/death
-    'death_penalty': -100,
+    'death_penalty': -10,
 
     # Bonus for passing a pipe
-    'pipe_pass_bonus': 0,
+    'pipe_pass_bonus': 10,
 
     # Reward shaping (distance-based rewards)
-    'use_distance_reward': False,
-    'distance_reward_scale': 0.01,
+    'use_distance_reward': True,
+    'distance_reward_scale': 0.5,
 }
 
 # ==================== OPTIMIZER SETTINGS ====================
