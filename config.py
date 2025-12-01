@@ -39,8 +39,8 @@ TRAINING_CONFIG = {
 
     # Exploration settings
     'epsilon_start': 1.0,
-    'epsilon_min': 0.01,
-    'epsilon_decay': 0.998,
+    'epsilon_min': 0.1,  # INCREASED: Keep more exploration
+    'epsilon_decay': 0.9995,  # MUCH SLOWER: Explore for longer
 
     # Batch size for training
     'batch_size': 32,

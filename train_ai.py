@@ -144,8 +144,8 @@ class FlappyBirdEnv:
         self.last_pipe_spawn = 0
         self.pipe_spawn_interval = PIPE_SPAWN_INTERVAL  # frames
 
-        # Spawn initial pipe
-        self._spawn_pipe()
+        # Spawn initial pipe MUCH closer for faster learning
+        self._spawn_pipe(initial=True)
 
         return self._get_observation()
 
