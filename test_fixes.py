@@ -5,6 +5,12 @@ Test script to verify the AI learning fixes
 
 import sys
 import numpy as np
+
+# Force reload of config to get latest values
+import importlib
+import config
+importlib.reload(config)
+
 from train_ai import FlappyBirdEnv, DQNAgent
 from config import GAME_CONFIG, TRAINING_CONFIG
 
@@ -40,6 +46,12 @@ def test_environment():
 def test_reward_structure():
     """Test that rewards are being calculated correctly"""
     print("Testing reward structure...")
+    from config import REWARD_CONFIG
+    print(f"Debug - Config values:")
+    print(f"  ALIVE_REWARD: {REWARD_CONFIG['alive_reward']}")
+    print(f"  JUMP_PENALTY: {REWARD_CONFIG['jump_penalty']}")
+    print(f"  PIPE_PASS_BONUS: {REWARD_CONFIG['pipe_pass_bonus']}")
+    print(f"  DEATH_PENALTY: {REWARD_CONFIG['death_penalty']}")
     env = FlappyBirdEnv()
     env.reset()
 
@@ -55,11 +67,19 @@ def test_reward_structure():
     # Simulate passing a pipe
     env.reset()
     env.bird_x = 100
-    env.pipes = [{'x': 50, 'gap_y': 250, 'gap_height': 180, 'width': 80, 'passed': False}]
+    # Place pipe so that after moving left by PIPE_SPEED=3, its right edge will be < bird_x
+    # Initial: x=17, right_edge = 17+80 = 97
+    # After step: x=14, right_edge = 14+80 = 94 < 100 ✓
+    initial_x = 17
+    env.pipes = [{'x': float(initial_x), 'gap_y': 250.0, 'gap_height': 180.0, 'width': 80.0, 'passed': False}]
     env.bird_y = 300
+    print(f"  Before step: pipe_x={env.pipes[0]['x']}, right_edge={env.pipes[0]['x'] + env.pipes[0]['width']}, bird_x={env.bird_x}")
     _, reward, done, info = env.step(0)
-    print(f"Reward for passing pipe: {reward:.3f}")
-    print(f"Score after passing pipe: {info['score']}")
+    print(f"  After step: pipe_x={env.pipes[0]['x'] if env.pipes else 'removed'}, bird_x={env.bird_x}")
+    print(f"  Reward for passing pipe: {reward:.3f}")
+    print(f"  Score after passing pipe: {info['score']}")
+    if env.pipes:
+        print(f"  Pipe passed flag: {env.pipes[0]['passed']}")
 
     print("✓ Reward structure test passed\n")
 
