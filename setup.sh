@@ -56,13 +56,6 @@ else
     exit 1
 fi
 
-# Install Python dependencies
-echo ""
-echo "Installing Python dependencies..."
-python3.6 -m pip install -r requirements.txt --user
-
-echo -e "${GREEN}✓ Python dependencies installed${NC}"
-
 # Build the Rust project
 echo ""
 echo "Building Rust game (this may take a while)..."
