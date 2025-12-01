@@ -152,8 +152,8 @@ class FlappyBirdEnv:
     def _spawn_pipe(self, initial=False):
         """Spawn a new pipe"""
         # Center gap EXACTLY around bird's starting position
-        # Bird starts at y=300, gap is 500 tall
-        # Gap from 50 to 550 means bird at 300 is perfectly centered
+        # Bird starts at y=300, gap is 550 tall
+        # Gap from 50 to 600 means bird at 300 is perfectly centered
         gap_y = 50.0  # Fixed position, perfectly centered
 
         if initial:
@@ -164,7 +164,10 @@ class FlappyBirdEnv:
             # Bird checks: 89.5 < 100? YES! Pipe passed immediately!
             spawn_x = 10.0
         else:
-            spawn_x = float(GAME_CONFIG['screen_width'])
+            # Spawn subsequent pipes close enough that bird can reach them!
+            # At speed 0.3, bird needs ~100 frames to reach pipe at x=130
+            # This gives time for learning but is actually reachable
+            spawn_x = 200.0
 
         self.pipes.append({
             'x': spawn_x,
