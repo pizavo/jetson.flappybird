@@ -151,12 +151,14 @@ class FlappyBirdEnv:
 
     def _spawn_pipe(self, initial=False):
         """Spawn a new pipe"""
-        # Center gaps more for easier learning - bird starts at y=300
-        gap_y = random.uniform(200.0, 250.0)  # Centered around bird start position
-        # Spawn first pipe IMMEDIATELY next to bird so it encounters it quickly!
-        # Bird at x=100, spawn at x=150 = only 50 pixels away
-        # At speed 1.5, reaches bird in 33 steps (before it dies at 62!)
-        spawn_x = 150.0 if initial else float(GAME_CONFIG['screen_width'])
+        # Center gap PERFECTLY around bird's starting Y position
+        # Bird starts at y=300, so center gap around y=100 (gap is 450 tall)
+        # This gives range of 100 to 550, bird at 300 is right in middle
+        gap_y = random.uniform(75.0, 125.0)  # Very centered
+        # Spawn first pipe close but give bird time to stabilize
+        # Bird at x=100, spawn at x=200 = 100 pixels away
+        # At speed 1.0, reaches bird in 100 steps
+        spawn_x = 200.0 if initial else float(GAME_CONFIG['screen_width'])
         self.pipes.append({
             'x': spawn_x,
             'gap_y': gap_y,

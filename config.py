@@ -10,10 +10,10 @@ GAME_CONFIG = {
     'bird_size': 32,
     'bird_start_x': 100,
     'bird_start_y': 300,
-    'gravity': 0.3,  # VERY SLOW falling - easier to control
-    'jump_strength': -7.0,  # Gentle jumps for precise control
+    'gravity': 0.5,  # Balanced with jump strength
+    'jump_strength': -8.5,  # Balanced with gravity
     'pipe_width': 80,
-    'pipe_gap': 400,  # HUGE gap - very easy to pass through
+    'pipe_gap': 450,  # MASSIVE gap - very easy to pass through
     'pipe_speed': 1.0,  # VERY SLOW pipes - lots of time to react
     'pipe_spawn_interval': 120,  # Even more spacing between pipes
 }
