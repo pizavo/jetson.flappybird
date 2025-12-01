@@ -39,17 +39,22 @@ fi
 
 echo -e "${GREEN}✓ Cargo found${NC}"
 
-# Check CUDA availability
+# Check PyTorch availability
 echo ""
-echo "Checking CUDA availability..."
-echo -e "${YELLOW}Note: PyTorch 1.10.0 is pre-installed on Jetson Nano${NC}"
-python3.6 -c "import torch; print('PyTorch version:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')" 2>/dev/null || {
-    echo -e "${RED}Error: PyTorch not found. Please install PyTorch 1.10.0 for Jetson Nano${NC}"
+echo "Checking PyTorch installation..."
+echo -e "${YELLOW}Note: PyTorch 1.10.0 should be pre-installed on Jetson Nano${NC}"
+
+# Simple import check first
+if python3.6 -c "import torch" 2>/dev/null; then
+    echo -e "${GREEN}✓ PyTorch detected and importable${NC}"
+    # Try to get version info (may fail on some systems)
+    python3.6 -c "import torch; print('  Version:', torch.__version__)" 2>/dev/null || echo -e "${YELLOW}  (version check skipped)${NC}"
+else
+    echo -e "${RED}Error: PyTorch not found or cannot be imported${NC}"
+    echo "Please install PyTorch 1.10.0 for Jetson Nano"
     echo "Download from NVIDIA's pre-built wheels for Jetson"
     exit 1
-}
-
-echo -e "${GREEN}✓ PyTorch 1.10.0 detected${NC}"
+fi
 
 # Install Python dependencies
 echo ""
@@ -92,6 +97,7 @@ echo "   python3.6 test_ai.py --model models/best_model.pth"
 echo ""
 echo "4. Visualize training results:"
 echo "   python3.6 visualize_training.py"
+echo "   (Or copy models/training_stats.json to another machine)"
 echo ""
 echo "5. Compare all models:"
 echo "   python3.6 test_ai.py --compare"
