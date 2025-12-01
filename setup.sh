@@ -42,14 +42,18 @@ echo -e "${GREEN}✓ Cargo found${NC}"
 # Check CUDA availability
 echo ""
 echo "Checking CUDA availability..."
-python3.6 -m pip show torch &> /dev/null || echo -e "${YELLOW}Warning: PyTorch not installed via python3.6; continuing${NC}"
-python3.6 -c "import torch; print('CUDA available:', torch.cuda.is_available()); print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')" 2>/dev/null || {
-    echo -e "${YELLOW}Warning: Could not check CUDA. Installing dependencies...${NC}"
+echo -e "${YELLOW}Note: PyTorch 1.10.0 is pre-installed on Jetson Nano${NC}"
+python3.6 -c "import torch; print('PyTorch version:', torch.__version__); print('CUDA available:', torch.cuda.is_available()); print('Device:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'CPU')" 2>/dev/null || {
+    echo -e "${RED}Error: PyTorch not found. Please install PyTorch 1.10.0 for Jetson Nano${NC}"
+    echo "Download from NVIDIA's pre-built wheels for Jetson"
+    exit 1
 }
+
+echo -e "${GREEN}✓ PyTorch 1.10.0 detected${NC}"
 
 # Install Python dependencies
 echo ""
-echo "Installing Python dependencies..."
+echo "Installing Python dependencies (numpy, matplotlib)..."
 python3.6 -m pip install -r requirements.txt --user
 
 echo -e "${GREEN}✓ Python dependencies installed${NC}"
