@@ -12,5 +12,5 @@ echo "Press Ctrl+C to stop training at any time."
 echo "Models are saved every 50 episodes."
 echo ""
 read -p "Press Enter to start training..."
-python3 train_ai.py
+python3.6 train_ai.py
 
