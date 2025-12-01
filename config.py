@@ -63,8 +63,8 @@ REWARD_CONFIG = {
     # Reward for staying alive per frame
     'alive_reward': 0.1,
 
-    # Penalty for jumping (to encourage efficiency)
-    'jump_penalty': -0.05,
+    # Penalty for jumping (DISABLED - jumping is necessary!)
+    'jump_penalty': 0.0,
 
     # Penalty for collision/death
     'death_penalty': -10,
