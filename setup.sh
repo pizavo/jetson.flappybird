@@ -58,10 +58,33 @@ fi
 
 # Install Python dependencies
 echo ""
-echo "Installing Python dependencies (numpy, matplotlib)..."
-python3.6 -m pip install -r requirements.txt --user
+echo "Checking Python dependencies..."
+echo -e "${YELLOW}Note: numpy must be installed via apt (not pip) on Jetson Nano${NC}"
 
-echo -e "${GREEN}✓ Python dependencies installed${NC}"
+# Check if numpy is available
+if python3.6 -c "import numpy" 2>/dev/null; then
+    echo -e "${GREEN}✓ numpy already available${NC}"
+    python3.6 -c "import numpy; print('  Version:', numpy.__version__)" 2>/dev/null || true
+else
+    echo -e "${RED}numpy not found or incompatible${NC}"
+    echo ""
+    echo "To install ARM-compatible numpy, run:"
+    echo "  sudo apt-get update"
+    echo "  sudo apt-get install python3-numpy"
+    echo ""
+    read -p "Install numpy via apt now? (y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        sudo apt-get update
+        sudo apt-get install -y python3-numpy
+        echo -e "${GREEN}✓ numpy installed${NC}"
+    else
+        echo -e "${RED}Cannot continue without numpy. Exiting.${NC}"
+        exit 1
+    fi
+fi
+
+echo -e "${GREEN}✓ Python dependencies ready${NC}"
 
 # Build the Rust project
 echo ""
@@ -95,9 +118,9 @@ echo ""
 echo "3. Test a trained model:"
 echo "   python3.6 test_ai.py --model models/best_model.pth"
 echo ""
-echo "4. Visualize training results:"
-echo "   python3.6 visualize_training.py"
-echo "   (Or copy models/training_stats.json to another machine)"
+echo "4. Visualize training results (requires matplotlib - not available on Jetson):"
+echo "   Copy models/training_stats.json to another machine and run:"
+echo "   python3 visualize_training.py"
 echo ""
 echo "5. Compare all models:"
 echo "   python3.6 test_ai.py --compare"
