@@ -10,12 +10,12 @@ GAME_CONFIG = {
     'bird_size': 32,
     'bird_start_x': 100,
     'bird_start_y': 300,
-    'gravity': 0.6,  # Standard gravity for stable flight
-    'jump_strength': -10.0,  # Standard jump that works with this gravity
+    'gravity': 0.4,  # Very light gravity - easier to control
+    'jump_strength': -7.5,  # Balanced with light gravity
     'pipe_width': 80,
-    'pipe_gap': 500,  # MASSIVE gap - almost entire screen!
-    'pipe_speed': 0.5,  # EXTREMELY SLOW - gives lots of time
-    'pipe_spawn_interval': 150,  # Lots of spacing between pipes
+    'pipe_gap': 550,  # MASSIVE gap - nearly entire screen!
+    'pipe_speed': 0.3,  # VERY SLOW - lots of time to react
+    'pipe_spawn_interval': 30,  # Second pipe spawns at step 30!
 }
 
 # ==================== NEURAL NETWORK SETTINGS ====================
@@ -32,15 +32,15 @@ TRAINING_CONFIG = {
     'num_episodes': 1000,
 
     # Learning rate for the optimizer
-    'learning_rate': 0.0005,
+    'learning_rate': 0.001,  # Increased for faster learning
 
     # Discount factor for future rewards
     'gamma': 0.99,
 
     # Exploration settings
     'epsilon_start': 1.0,
-    'epsilon_min': 0.1,  # INCREASED: Keep more exploration
-    'epsilon_decay': 0.9995,  # MUCH SLOWER: Explore for longer
+    'epsilon_min': 0.05,  # Some exploration always
+    'epsilon_decay': 0.995,  # Faster decay - start using learned policy sooner
 
     # Batch size for training
     'batch_size': 32,
